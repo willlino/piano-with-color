@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="utf-8">
+	<style>
+		body {
+			padding-top: 100px;
+		}
+
+		canvas {
+			padding-left: 0;
+			padding-right: 0;
+			margin-left: auto;
+			margin-right: auto;
+			display: block;
+			border: 2px solid black;
+		}
+	</style>
+</head>
+
+<body>
+	<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+	<script type="module">
+		import { runPiano } from './js/keyboard.js';
+		runPiano();
+	</script>
+	<canvas id="canvas" width="960px" height="300px"></canvas>
+</body>
+
+</html>

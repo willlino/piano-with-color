@@ -1,0 +1,8 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  web:
+    image: nginx:1.19.6-alpine
+    ports:
+      - "5001:80"
+    volumes:
+      - .:/usr/share/nginx/html
