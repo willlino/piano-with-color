@@ -1,6 +1,7 @@
 import Player from './player.js';
 import Keyboarder from './keyboarder.js';
 import Sprite from './sprite.js';
+import SoundColor from './soundColor.js';
 
 
 export default class Game {
@@ -74,7 +75,9 @@ export default class Game {
                     this.player.start(audioCtx, index);
 
                     var currentFrequency = this.player.frequencies[index];
-                    console.log(currentFrequency);
+                    
+                    var noteColorHex = new SoundColor(currentFrequency, this.player).getSoundColorHex();
+                    document.body.style.backgroundColor = noteColorHex.color;
                 }
             }
         }
@@ -88,6 +91,8 @@ export default class Game {
                 var index = this.keyboarder.KEYS[keyDiffs[i]];
                 if (this.player.oscillators[index] != null) {
                     this.player.stop(index);
+
+                    document.body.style.backgroundColor = "white";
                 }
             }
         }
