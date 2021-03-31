@@ -5,31 +5,31 @@ import SoundColor from './soundColor.js';
 
 
 export default class Game {
-    constructor(canvasId){
+    constructor(canvasId) {
         var canvas = document.getElementById(canvasId);
-		var screen = canvas.getContext('2d');
-		var audioCtx = new AudioContext();
-		
-		this.gameSize = { x : canvas.width, y : canvas.height};
-		this.keyboarder = new Keyboarder();
-		this.player = new Player(174.614, 20); // F3 (a) to C5 (enter)
+        var screen = canvas.getContext('2d');
+        var audioCtx = new AudioContext();
 
-		// piano
-		var piano = new Image(2880, 2100);
-		this.piano = new Sprite({
-			width: 960,
-			height: 300,
-			image: piano,
-		});
-		piano.src = "Images/KeyboardSpriteSheet.png";
+        this.gameSize = { x: canvas.width, y: canvas.height };
+        this.keyboarder = new Keyboarder();
+        this.player = new Player(174.614, 20); // F3 (a) to C5 (enter)
 
-		var self = this;
-		var tick = function() {
-			self.update(audioCtx);
-			self.draw(screen);	
+        // piano
+        var piano = new Image(2880, 2100);
+        this.piano = new Sprite({
+            width: 960,
+            height: 300,
+            image: piano,
+        });
+        piano.src = "Images/KeyboardSpriteSheet.png";
+
+        var self = this;
+        var tick = function () {
+            self.update(audioCtx);
+            self.draw(screen);
             requestAnimationFrame(tick);
-		};
-		tick();
+        };
+        tick();
     }
 
     update(audioCtx) {
@@ -38,28 +38,29 @@ export default class Game {
         this.keyboarder.filter();
 
         // update piano keyboard sprite
-        var frameIndices = this.keyboarder.keysDown.map(function(n) {
-            var KEYS = {'65' : 0, // a
-                 '87' : 1, // w
-                 '83' : 2, // s
-                 '69' : 3, // e
-                 '68' : 4, // d
-                 '82' : 5, // r
-                 '70' : 6, // f
-                 '71' : 7, // g
-                 '89' : 8, // y
-                 '72' : 9, // h
-                 '85' : 10, // u
-                 '74' : 11, // j
-                 '75' : 12, // k
-                 '79' : 13, // o
-                 '76' : 14, // l
-                 '80' : 15, // p
-                 '186' : 16, // ;
-                 '219' : 17, // [
-                 '222' : 18, // '
-                 '13' : 19  // enter
-                  };
+        var frameIndices = this.keyboarder.keysDown.map(function (n) {
+            var KEYS = {
+                '65': 0, // a
+                '87': 1, // w
+                '83': 2, // s
+                '69': 3, // e
+                '68': 4, // d
+                '82': 5, // r
+                '70': 6, // f
+                '71': 7, // g
+                '89': 8, // y
+                '72': 9, // h
+                '85': 10, // u
+                '74': 11, // j
+                '75': 12, // k
+                '79': 13, // o
+                '76': 14, // l
+                '80': 15, // p
+                '186': 16, // ;
+                '219': 17, // [
+                '222': 18, // '
+                '13': 19  // enter
+            };
             return KEYS[n] + 1;
         });
         this.piano.update(frameIndices);
@@ -75,9 +76,9 @@ export default class Game {
                     this.player.start(audioCtx, index);
 
                     var currentFrequency = this.player.frequencies[index];
-                    
+
                     var noteColorHex = new SoundColor(currentFrequency, this.player).getSoundColorHex();
-                    document.body.style.backgroundColor = noteColorHex.color;
+                    this.setBackgroundColor(noteColorHex.color);
                 }
             }
         }
@@ -91,8 +92,6 @@ export default class Game {
                 var index = this.keyboarder.KEYS[keyDiffs[i]];
                 if (this.player.oscillators[index] != null) {
                     this.player.stop(index);
-
-                    document.body.style.backgroundColor = "white";
                 }
             }
         }
@@ -104,5 +103,15 @@ export default class Game {
 
     draw(screen) {
         this.piano.draw(screen);
+    }
+
+    setBackgroundColor(backgroundColor) {
+        $('body')[0].animate({
+            backgroundColor: [backgroundColor]
+        }, {
+            duration: 200,
+            easing: 'ease-out',
+            fill: 'both'
+        });
     }
 }
